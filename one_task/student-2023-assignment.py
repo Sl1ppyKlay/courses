@@ -40,7 +40,7 @@ def save_source_text(): # сохранения исходного текста
     lines_list = []
 
     for item in updated_data:
-        lines_list.extend([line for line in item.split('\n') if line.strip()]) # объединение списков, для того чтобы пропали пустые строки
+        lines_list.extend([line for line in item.split('\n') if line.strip()]) # удаление пустых строк
 
     with open('result.json', 'w') as result:
         try:
