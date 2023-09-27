@@ -2,6 +2,8 @@ import random
 
 def main():
     rand = random.randint(1, 10)
+    minimal = 1
+    maximum = 10
     ans = input('Привет!\nБудешь угадывать? (да/нет): ').lower()
 
     if ans != 'да':
@@ -12,8 +14,8 @@ def main():
 
     while True:
         try:
-            number = int(input('Угадай чисто от 1 до 10: '))
-            if 1 <= number <= 10:
+            number = int(input(f'Угадай чисто от {minimal} до {maximum}: '))
+            if minimal <= number <= maximum:
                 control = abs(number - rand)
                 if control > 5:
                     print('\nХолодно!\n')
