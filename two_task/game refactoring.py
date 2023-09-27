@@ -1,9 +1,7 @@
 import random
 
 def main():
-    rand = random.randint(1, 10)
-    minimal = 1
-    maximum = 10
+    rand = random.randint(minimal, maximum)
     ans = input('Привет!\nБудешь угадывать? (да/нет): ').lower()
 
     if ans != 'да':
@@ -14,23 +12,25 @@ def main():
 
     while True:
         try:
-            number = int(input(f'Угадай чисто от {minimal} до {maximum}: '))
+            number = int(input(f'\nУгадай чисто от {minimal} до {maximum}: '))
             if minimal <= number <= maximum:
                 control = abs(number - rand)
                 if control > 5:
-                    print('\nХолодно!\n')
+                    print('Холодно!\n')
                 elif control > 2:
-                    print ('\nТепло!\n')
+                    print ('Тепло!\n')
                 else:
-                    print ('\nЖгётся!\n')
+                    print ('Жгётся!\n')
                 
                 if number == rand:
                     print('Вы угадали число! Число было -', rand)
                     break
             else: 
-                print ('\nЧисло должно быть в пределах от 1 до 10!')
+                print ('\n\nЧисло должно быть в пределах от 1 до 10!')
         except ValueError:
             print(f'\nОшибка! Должно быть введено число!')
 
 if __name__ == '__main__':
+    minimal = 1
+    maximum = 10
     main()
