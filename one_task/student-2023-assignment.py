@@ -2,7 +2,7 @@ import requests
 import json
 
 
-def api(path): # парсинг данных
+def api(path): # сбор данных
     data = requests.get(path).json()
     return data
 
@@ -50,7 +50,7 @@ def save_source_text(): # сохранение исходного текста
 
 def data_input():
     try:
-        data = api(input('Привет!\nНапиши ссылку для парсинга данных с сайта: '))
+        data = api(input('Привет!\nВставь ссылку для сбора информации с сайта: '))
         f_path = str(input('Напиши путь до json файла: '))
     except ValueError:
         print ('Произошла ошибка!')
