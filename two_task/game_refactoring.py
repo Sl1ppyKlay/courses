@@ -7,11 +7,13 @@ def main():
     rand = random.randint(minimal, maximum)
     ans = input('Привет!\nБудешь угадывать? (да/нет): ').lower()
 
+    if ans == 'нет':
+        print('Пока!')
+        return
+
     if ans != 'да':
         print('Ошибка ввода!')
-
-    if ans == 'нет':
-        print ('Пока')
+        return
 
     while True:
         try:
