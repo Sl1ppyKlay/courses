@@ -1,44 +1,71 @@
+# я знаю что можно использовать декораторы, но не хочу ¯\_(ツ)_/¯
+
 import unittest
 import io
-from unittest.mock import MagicMock, mock_open, patch
-from replacetext import api, open_file
+import json
 
-class TestSystemReplacement(unittest.TestCase):
+from unittest.mock import mock_open, patch
+from replacetext import api, open_file, dictionary, source_text, save_source_text
 
-    
-    @patch('requests.get')  # иммитация requests
-    def test_api_success(self, m_requests_get):  # проверка работы api удачно
-        response = MagicMock()  # иммитация ответа http-запроса
-
-        response.json.return_value = {'key': 'value'}
-        m_requests_get.return_value = response
-
-        result = api('https://blata.net')
-        self.assertEqual(result, {'key': 'value'})
+class TestAPI(unittest.TestCase):
+    def test_api_success(self):
+        with patch('requests.get') as m_requests_get:
+            m_requests_get.return_value.json.return_value = {'key': 'value'}
+            result = api('https://test_api.net')
+            self.assertEqual(result, {'key': 'value'})
 
 
-    @patch('requests.get')  # иммитация requests
-    @patch('sys.stdout', new_callable=io.StringIO)
-    def test_api_fail(self, m_stdout, m_requests_get):  # проверка работы api неудачно
-        m_requests_get.side_effect = ValueError  # вызов ValueError
+    def test_api_fail(self):
+        with patch ('sys.stdout', new_callable=io.StringIO) as m_stdout:
+            with patch('requests.get') as m_requests_get:
+                m_requests_get.side_effect = ValueError  # вызов ValueError
 
-        with self.assertRaises(SystemExit):
-            api('https://raw.githubusercontent.com/thewhitesoft/student-2023-assignment/main/data.json')
-                
-        self.assertIn('Произошла ошибка, при указание ссылки!', m_stdout.getvalue())
-
-
-    @patch('builtins.open', new_callable=mock_open, read_data='{"key": "value"}')
-    def test_open_file_sucess(self, m_file):  # проверка открытия файла удачно
-        result = open_file('blata_net.json')
-        self.assertEqual(result, {'key': 'value'})
+                with self.assertRaises(SystemExit):
+                    api('https://raw.githubusercontent.com/thewhitesoft/student-2023-assignment/main/data.json')
+                        
+                self.assertIn('Произошла ошибка, при указание ссылки!', m_stdout.getvalue().strip())
 
 
-    @patch('builtins.open', side_effect=FileNotFoundError)
-    def test_open_file_fail(self, m_file):  # проверка открытия файла неудачно 
-        with self.assertRaises(SystemExit):
-            open_file('blata_net.json')
+class TestOpenFile(unittest.TestCase):
+    def test_open_file_sucess(self):
+        with patch('builtins.open', new_callable=mock_open, read_data='{"key": "value"}'):
+            result = open_file('test_open_file.json')
+            self.assertEqual(result, {'key': 'value'})
+
+
+    def test_open_file_fail(self):
+        with patch('builtins.open', side_effect=FileNotFoundError):
+            with self.assertRaises(SystemExit):
+                open_file('test_open_file.json')
+
+
+class TestDictionary(unittest.TestCase):
+    def test_dictionary(self):
+        with patch('builtins.open', new_callable=mock_open, read_data='[{"replacement": "LoVe", "source": "Love"}, {"replacement": "Car", "source": "None"}]'):
+            result = dictionary('test_dictionary.json')
+            self.assertDictEqual(result, {"LoVe": {"replacement": "LoVe", "source": "Love"}, "Car": {"replacement": "Car", "source": "None"}})
+            
+
+class TestSourceText(unittest.TestCase):
+    def test_source_text(self):
+        data = ['new task']
+        with patch('builtins.open', new_callable=mock_open, read_data='[{"replacement": "new", "source": "old"}]') as f_path:
+            result = source_text(data, f_path)
+            self.assertEqual(result, ['old task'])
+
+
+# class TestSaveSourceText(unittest.TestCase):
+#     @patch('builtins.open', return_value=io.StringIO('["Maks", "How are you?", "I hope the code is ok!"]'))
+#     def test_save_source_text(self, mock_open):
+#         data = ["Maks", "How are you?", "I hope the code is ok!"]
+#         f_path = 'replacement.json'
+#         save_source_text(data, f_path)
         
+#         with open('result.json', 'r') as result:
+#             result = json.load(result)
+#         self.assertEqual(result, ["Maks", "How are you?", "I hope the code is ok!"])
+
+
 
 if __name__ == '__main__':
     unittest.main()
