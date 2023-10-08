@@ -1,5 +1,3 @@
-# я знаю что можно использовать декораторы, но не хочу ¯\_(ツ)_/¯
-
 import unittest
 import io
 
@@ -65,3 +63,5 @@ class TestSaveSourceText(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+    
+# я знаю что можно использовать декораторы, но не хочу ¯\_(ツ)_/¯
