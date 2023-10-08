@@ -2,10 +2,9 @@
 
 import unittest
 import io
-import json
 
 from unittest.mock import mock_open, patch
-from replacetext import api, open_file, dictionary, source_text, save_source_text
+from replacetext import api, open_file, dictionary, source_text, save_source_text, data_input
 
 class TestAPI(unittest.TestCase):
     def test_api_success(self):
@@ -54,17 +53,14 @@ class TestSourceText(unittest.TestCase):
             self.assertEqual(result, ['old task'])
 
 
-# class TestSaveSourceText(unittest.TestCase):
-#     @patch('builtins.open', return_value=io.StringIO('["Maks", "How are you?", "I hope the code is ok!"]'))
-#     def test_save_source_text(self, mock_open):
-#         data = ["Maks", "How are you?", "I hope the code is ok!"]
-#         f_path = 'replacement.json'
-#         save_source_text(data, f_path)
-        
-#         with open('result.json', 'r') as result:
-#             result = json.load(result)
-#         self.assertEqual(result, ["Maks", "How are you?", "I hope the code is ok!"])
+class TestSaveSourceText(unittest.TestCase):
+    def test_save_source_text(self):
+        with patch('replacetext.source_text', return_value=["Maks", "How are you?", "I hope the code is ok!"]) as check_source_text:
+            data = 'Test text!'
+            f_path = 'replacement.json'
 
+            save_source_text(data, f_path)
+            check_source_text.assert_called_once_with(data, f_path)  # проверка что вызвана один раз
 
 
 if __name__ == '__main__':
