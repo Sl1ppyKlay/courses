@@ -16,8 +16,8 @@ def open_file(path): #  открытие файла
     try:
         with open(path, 'r') as r:
             return json.load(r)
-    except FileNotFoundError:
-        print ('Произошла ошибка, при указание пути файла!')
+    except FileNotFoundError as e:
+        print (f'Произошла ошибка, при указание пути файла: {e}')
         sys.exit()
 
 
