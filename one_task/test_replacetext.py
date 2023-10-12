@@ -53,7 +53,7 @@ class TestSourceText(unittest.TestCase):
 
 class TestSaveSourceText(unittest.TestCase):
     def test_save_source_text(self):
-        with patch('replacetext.source_text', return_value=["Maks", "How are you?", "I hope the code is ok!"]) as check_source_text:
+        with patch('replacetext.source_text', return_value=["Denis", "How are you?", "I hope the code is ok!"]) as check_source_text:
             data = 'test'
             f_path = 'replacement.json'
 
